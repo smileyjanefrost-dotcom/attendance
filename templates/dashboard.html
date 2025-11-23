@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="3">
+    <title>Attendance Dashboard</title>
+    <style>
+        body{background:#000033;color:#0ff;font-family:Arial;text-align:center;padding:20px}
+        h1{font-size:60px;margin:20px}
+        table{margin:auto;width:90%;border-collapse:collapse}
+        th,td{border:2px solid #0ff;padding:15px;font-size:20px}
+        th{background:#000}
+    </style>
+</head>
+<body>
+    <h1>SMART ATTENDANCE SYSTEM</h1>
+    <h1 style="font-size:100px">{{ timer }}</h1>
+    <h2 style="color:{{ 'lime' if open else 'red' }}">{{ 'OPEN' if open else 'CLOSED' }}</h2>
+    <table>
+        <tr><th>No.</th><th>Name</th><th>Roll No</th><th>IP</th><th>Time</th></tr>
+        {% for i, row in enumerate(rows) %}
+        <tr><td>{{ i+1 }}</td><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td><td>{{ row[3] }}</td></tr>
+        {% endfor %}
+    </table>
+    <p style="margin-top:50px;font-size:25px">Computer Networks Project – Live on Internet</p>
+</body>
+</html>
