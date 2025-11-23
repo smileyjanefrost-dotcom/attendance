@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><title>Smart Attendance</title>
+<style>body{background:#000;color:#0ff;font-family:Arial;text-align:center;padding:50px}
+video{border:10px solid #0ff;border-radius:30px} h1{font-size:50px}</style></head>
+<body><h1>SMART ATTENDANCE</h1>
+<input id="roll" placeholder="Enter Roll Number" style="padding:15px;font-size:25px"><br><br>
+<button onclick="go()" style="padding:15px 30px;font-size:25px">START CAMERA</button>
+<video id="v" width="640" height="480" autoplay muted></video>
+<div id="msg" style="font-size:40px;margin:20px">Click START and look at camera</div>
+
+<script>
+let marked=false;
+function go(){
+    const roll = document.getElementById("roll").value.trim();
+    if(!roll){alert("Enter roll number first!");return;}
+    navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+        document.getElementById("v").srcObject=s;
+        document.getElementById("msg").innerText="Looking for your face...";
+        setInterval(()=>scan(roll),1500);
+    });
+}
+async function scan(roll){
+    if(marked)return;
+    const c=document.createElement("canvas"); c.width=640; c.height=480;
+    c.getContext("2d").drawImage(document.getElementById("v"),0,0);
+    try{
+        const r=await fetch("/mark",{method:"POST",headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({name:"Student",roll:roll})});
+        const d=await r.json();
+        if(d.status==="success"){
+            document.getElementById("msg").innerHTML="<span style='color:lime'>✓ ATTENDANCE MARKED!</span>";
+            marked=true;
+        }
+    }catch(e){}
+}
+</script></body></html>
